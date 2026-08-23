@@ -39,3 +39,27 @@ order_data.select(
     "Discount_amount",
     "Net_Total"
 ).show(10)
+
+# write to Parquet file 
+output_path = r"C:\Users\kamal\OneDrive\Desktop\Aws-PySpark-DataPipeline\Data\output\orders"
+
+order_data.write \
+    .mode("overwrite") \
+    .parquet(output_path)
+
+output_df = spark.read.parquet(output_path)
+
+print("Transformation completed successfully")
+print("Output written to:", output_path)
+print("Output record count:", output_df.count())
+output_df = spark.read.parquet(output_path)
+
+output_df.select(
+    "order_id",
+    "quantity",
+    "unit_price",
+    "discount_pct",
+    "Gross_amount",
+    "Discount_amount",
+    "Net_Total"
+).show(10, truncate=False)
